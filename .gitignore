@@ -44,3 +44,5 @@ go.sum
 .DS_Store
 
 .direnv
+
+**/kubeconfig
