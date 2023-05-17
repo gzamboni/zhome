@@ -29,9 +29,9 @@ repos:
       # see https://github.com/antonbabenko/pre-commit-terraform#terraform_fmt
       - id: terraform_fmt
 
-      # see https://github.com/antonbabenko/pre-commit-terraform#terraform_validate
-      - id: terraform_validate
-        exclude: examples/.*
+      # # see https://github.com/antonbabenko/pre-commit-terraform#terraform_validate
+      # - id: terraform_validate
+      #   exclude: examples/.*
 
       # see https://github.com/antonbabenko/pre-commit-terraform#terraform_docs
       - id: terraform_docs

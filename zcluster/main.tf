@@ -22,3 +22,10 @@ module "loadbalancer_metallb" {
   address_pool = var.metallb_address_pool
   depends_on   = [module.k3s]
 }
+
+module "pvc_storage_manager" {
+  source     = "./longhorn"
+  namespace  = "longhorn-system"
+  data_path  = "/storage"
+  depends_on = [module.k3s]
+}

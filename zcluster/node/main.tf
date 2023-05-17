@@ -1,11 +1,16 @@
 resource "null_resource" "nodes" {
+  triggers = {
+    node_ip      = var.node_ip
+    node_version = "1.0.0"
+  }
   provisioner "remote-exec" {
     inline = [
       "hostnamectl set-hostname ${var.node_hostname}.${var.node_local_domain}",
       "echo \"${templatefile("${path.module}/templates/hosts.tpl", { hostname = var.node_hostname, nodes = var.nodes_hosts, local_domain = var.node_local_domain })}\" > /etc/hosts",
       "chmod 644 /etc/hosts",
       "apt-get update && apt-get upgrade -y",
-      "apt-get install -y apt-transport-https ca-certificates curl",
+      "apt-get install -y apt-transport-https ca-certificates curl nfs-common open-iscsi util-linux",
+      "mkdir -p /storage",
     ]
     connection {
       type        = "ssh"
