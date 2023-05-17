@@ -29,7 +29,7 @@ This repository contains the new terraform modules to configure my personal K8s 
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=0.13 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.9.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | 1.14.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.20.0 |
@@ -53,6 +53,7 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | Object containing k3s configuration | <pre>object({<br>    cluster_name = string<br>    local_domain = string<br>    context      = string<br>    nodes = map(object({<br>      ip   = string<br>      type = string<br>    }))<br>    users = map(object({<br>      username = string<br>      password = string<br>    }))<br>  })</pre> | n/a | yes |
+| <a name="input_metallb_address_pool"></a> [metallb\_address\_pool](#input\_metallb\_address\_pool) | Defines the MetalLB address pool, a map of name and addresses (ip ranges or ip/mask) | <pre>object({<br>    name      = string<br>    addresses = list(string)<br>  })</pre> | n/a | yes |
 | <a name="input_kubeconfig"></a> [kubeconfig](#input\_kubeconfig) | Path to kubeconfig file | `string` | `"~/.kube/config"` | no |
 
 ## Outputs

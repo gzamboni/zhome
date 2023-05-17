@@ -20,3 +20,11 @@ variable "k3s_config" {
     }))
   })
 }
+
+variable "metallb_address_pool" {
+  description = "Defines the MetalLB address pool, a map of name and addresses (ip ranges or ip/mask)"
+  type = object({
+    name      = string
+    addresses = list(string)
+  })
+}

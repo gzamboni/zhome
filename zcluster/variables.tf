@@ -36,3 +36,21 @@ variable "node_users" {
     password = string
   }))
 }
+
+variable "metallb_namespace" {
+  description = "Defines the MetalLB namespace"
+  default     = "metallb-system"
+  type        = string
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.metallb_namespace))
+    error_message = "Invalid namespace format, should be lowercase alphanumeric"
+  }
+}
+
+variable "metallb_address_pool" {
+  description = "Defines the MetalLB address pool, a map of name and addresses (ip ranges or ip/mask)"
+  type = object({
+    name      = string
+    addresses = list(string)
+  })
+}

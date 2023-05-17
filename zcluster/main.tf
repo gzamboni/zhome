@@ -15,3 +15,10 @@ module "k3s" {
   ssh_key    = file("~/.ssh/id_rsa")
   depends_on = [module.zcluster_nodes]
 }
+
+module "loadbalancer_metallb" {
+  source       = "./metallb"
+  namespace    = "metallb-system"
+  address_pool = var.metallb_address_pool
+  depends_on   = [module.k3s]
+}
