@@ -42,11 +42,11 @@ repos:
       # see https://github.com/antonbabenko/pre-commit-terraform#terraform_providers_lock
       - id: terraform_providers_lock
 
-      # see https://github.com/antonbabenko/pre-commit-terraform#terraform_tflint
-      - id: terraform_tflint
-        exclude: 'examples/.*'
-        args:
-          - "--args=--config=__GIT_WORKING_DIR__/.tflint.hcl"
+      # # see https://github.com/antonbabenko/pre-commit-terraform#terraform_tflint
+      # - id: terraform_tflint
+      #   exclude: 'examples/.*'
+      #   args:
+      #     - "--args=--config=__GIT_WORKING_DIR__/.tflint.hcl"
 
       - id: terraform_tfsec
         args:

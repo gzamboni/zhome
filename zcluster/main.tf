@@ -1,0 +1,17 @@
+module "zcluster_nodes" {
+  for_each          = var.nodes
+  source            = "./node"
+  node_ip           = each.value.ip
+  node_hostname     = each.key
+  node_local_domain = var.local_domain
+  node_ssh_key      = file("~/.ssh/id_rsa.pub")
+  nodes_hosts       = var.nodes
+  node_users        = var.node_users
+}
+
+module "k3s" {
+  source     = "./k3s"
+  nodes      = var.nodes
+  ssh_key    = file("~/.ssh/id_rsa")
+  depends_on = [module.zcluster_nodes]
+}
