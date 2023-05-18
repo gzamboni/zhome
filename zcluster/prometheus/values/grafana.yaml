@@ -10,7 +10,7 @@ image:
 
 persistence:
     enabled: true
-    storageClassName: longhorn-external
+    storageClassName: longhorn
     size: 10Gi
 
 datasources:
