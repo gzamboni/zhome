@@ -20,45 +20,21 @@ resource "helm_release" "longhorn_storage" {
   chart      = "longhorn"
   namespace  = kubernetes_namespace.longhorn_storage.metadata[0].name
   depends_on = [kubernetes_namespace.longhorn_storage]
+
   set {
     name  = "defaultSettings.defaultDataPath"
     value = var.data_path
   }
-}
-
-resource "kubernetes_ingress_v1" "longhorn_ui" {
-  wait_for_load_balancer = true
-  metadata {
-    name      = "longhorn-ui"
-    namespace = kubernetes_namespace.longhorn_storage.metadata[0].name
-    annotations = {
-      "kubernetes.io/ingress.class" = "traefik"
-    }
+  set {
+    name  = "ingress.enabled"
+    value = "true"
   }
-  spec {
-    default_backend {
-      service {
-        name = "longhorn-frontend"
-        port {
-          name = "http"
-        }
-      }
-    }
-    rule {
-      host = "longhorn.${var.domain}"
-      http {
-        path {
-          backend {
-            service {
-              name = "longhorn-frontend"
-              port {
-                name = "http"
-              }
-            }
-          }
-          path = "/"
-        }
-      }
-    }
+  set {
+    name  = "ingress.annotations.kubernetes.io/ingress.class"
+    value = "traefik"
+  }
+  set {
+    name  = "ingress.host"
+    value = "longhorn.${var.domain}"
   }
 }
