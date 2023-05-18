@@ -38,3 +38,16 @@ resource "helm_release" "longhorn_storage" {
     value = "longhorn.${var.domain}"
   }
 }
+
+resource "kubernetes_storage_class" "longhorn_external" {
+  metadata {
+    name = "longhorn-external"
+  }
+  storage_provisioner = "driver.longhorn.io"
+  parameters = {
+    numberOfReplicas    = "1"
+    staleReplicaTimeout = "480"
+    diskSelector        = "external"
+    nodeSelector        = "sata_node"
+  }
+}

@@ -29,3 +29,8 @@ module "pvc_storage_manager" {
   data_path  = "/storage"
   depends_on = [module.k3s]
 }
+
+module "prometheus" {
+  source = "./prometheus"
+  domain = "k3s.${var.local_domain}"
+}
