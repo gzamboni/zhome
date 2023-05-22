@@ -42,6 +42,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_dyndns"></a> [dyndns](#module\_dyndns) | ./dyndns | n/a |
 | <a name="module_zcluster"></a> [zcluster](#module\_zcluster) | ./zcluster | n/a |
 
 ## Resources
@@ -52,6 +53,9 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_google_dynamic_dns_fqdn"></a> [google\_dynamic\_dns\_fqdn](#input\_google\_dynamic\_dns\_fqdn) | The FQDN of the dynamic DNS record to update | `string` | n/a | yes |
+| <a name="input_google_dynamic_dns_password"></a> [google\_dynamic\_dns\_password](#input\_google\_dynamic\_dns\_password) | The password to use for dynamic DNS updates | `string` | n/a | yes |
+| <a name="input_google_dynamic_dns_username"></a> [google\_dynamic\_dns\_username](#input\_google\_dynamic\_dns\_username) | The username to use for dynamic DNS updates | `string` | n/a | yes |
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | Object containing k3s configuration | <pre>object({<br>    cluster_name = string<br>    local_domain = string<br>    context      = string<br>    nodes = map(object({<br>      ip   = string<br>      type = string<br>    }))<br>    users = map(object({<br>      username = string<br>      password = string<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_metallb_address_pool"></a> [metallb\_address\_pool](#input\_metallb\_address\_pool) | Defines the MetalLB address pool, a map of name and addresses (ip ranges or ip/mask) | <pre>object({<br>    name      = string<br>    addresses = list(string)<br>  })</pre> | n/a | yes |
 | <a name="input_kubeconfig"></a> [kubeconfig](#input\_kubeconfig) | Path to kubeconfig file | `string` | `"~/.kube/config"` | no |

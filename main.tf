@@ -7,3 +7,10 @@ module "zcluster" {
   node_users           = var.k3s_config.users
   metallb_address_pool = var.metallb_address_pool
 }
+
+module "dyndns" {
+  source                      = "./dyndns"
+  google_dynamic_dns_username = var.google_dynamic_dns_username
+  google_dynamic_dns_password = var.google_dynamic_dns_password
+  google_dynamic_dns_fqdn     = var.google_dynamic_dns_fqdn
+}
