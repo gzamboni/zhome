@@ -13,4 +13,17 @@ module "dyndns" {
   google_dynamic_dns_username = var.google_dynamic_dns_username
   google_dynamic_dns_password = var.google_dynamic_dns_password
   google_dynamic_dns_fqdn     = var.google_dynamic_dns_fqdn
+  depends_on                  = [module.zcluster]
+}
+
+module "zvault" {
+  source               = "./vaultwarden"
+  depends_on           = [module.zcluster]
+  timezone             = var.vaultwarden_config.timezone
+  ingress_hosts        = var.vaultwarden_config.ingress_hosts
+  allow_signups        = var.vaultwarden_config.allow_signups
+  domain_white_list    = var.vaultwarden_config.domain_white_list
+  org_creation_users   = var.vaultwarden_config.org_creation_users
+  default_vault_domain = var.vaultwarden_config.default_vault_domain
+  smtp_config          = var.default_smtp_config
 }

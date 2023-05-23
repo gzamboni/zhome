@@ -44,6 +44,7 @@ No providers.
 |------|--------|---------|
 | <a name="module_dyndns"></a> [dyndns](#module\_dyndns) | ./dyndns | n/a |
 | <a name="module_zcluster"></a> [zcluster](#module\_zcluster) | ./zcluster | n/a |
+| <a name="module_zvault"></a> [zvault](#module\_zvault) | ./vaultwarden | n/a |
 
 ## Resources
 
@@ -53,11 +54,13 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_default_smtp_config"></a> [default\_smtp\_config](#input\_default\_smtp\_config) | Object containing default SMTP configuration | <pre>object({<br>    server = object({<br>      host      = string<br>      port      = string<br>      security  = string<br>      timeout   = string<br>      helo_name = string<br>    })<br>    auth = object({<br>      username = string<br>      password = string<br>    })<br>    email_config = object({<br>      from         = string<br>      from_name    = string<br>      embed_images = bool<br>    })<br>  })</pre> | n/a | yes |
 | <a name="input_google_dynamic_dns_fqdn"></a> [google\_dynamic\_dns\_fqdn](#input\_google\_dynamic\_dns\_fqdn) | The FQDN of the dynamic DNS record to update | `string` | n/a | yes |
 | <a name="input_google_dynamic_dns_password"></a> [google\_dynamic\_dns\_password](#input\_google\_dynamic\_dns\_password) | The password to use for dynamic DNS updates | `string` | n/a | yes |
 | <a name="input_google_dynamic_dns_username"></a> [google\_dynamic\_dns\_username](#input\_google\_dynamic\_dns\_username) | The username to use for dynamic DNS updates | `string` | n/a | yes |
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | Object containing k3s configuration | <pre>object({<br>    cluster_name = string<br>    local_domain = string<br>    context      = string<br>    nodes = map(object({<br>      ip   = string<br>      type = string<br>    }))<br>    users = map(object({<br>      username = string<br>      password = string<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_metallb_address_pool"></a> [metallb\_address\_pool](#input\_metallb\_address\_pool) | Defines the MetalLB address pool, a map of name and addresses (ip ranges or ip/mask) | <pre>object({<br>    name      = string<br>    addresses = list(string)<br>  })</pre> | n/a | yes |
+| <a name="input_vaultwarden_config"></a> [vaultwarden\_config](#input\_vaultwarden\_config) | Object containing vaultwarden configuration | <pre>object({<br>    timezone             = string<br>    default_vault_domain = string<br>    ingress_hosts        = list(string)<br>    allow_signups        = bool<br>    domain_white_list    = list(string)<br>    org_creation_users   = list(string)<br>  })</pre> | n/a | yes |
 | <a name="input_kubeconfig"></a> [kubeconfig](#input\_kubeconfig) | Path to kubeconfig file | `string` | `"~/.kube/config"` | no |
 
 ## Outputs
