@@ -1,3 +1,7 @@
+locals {
+  smtp_config = var.default_smtp_config
+}
+
 resource "helm_release" "prometheus" {
   name             = "prometheus"
   namespace        = "prometheus"
@@ -63,6 +67,57 @@ resource "helm_release" "prometheus" {
     name  = "alertmanager.persistentVolume.storageClass"
     value = "longhorn-external"
   }
+
+  values = [<<-EOF
+    alertmanager:
+      config:
+        global:
+          smtp_hello: ${local.smtp_config.server.helo_name}
+          smtp_from: ${local.smtp_config.email_config.from}
+          smtp_smarthost: ${local.smtp_config.server.host}:${local.smtp_config.server.port}
+          smtp_auth_username: ${local.smtp_config.auth.username}
+          smtp_auth_password: ${local.smtp_config.auth.password}
+          smtp_require_tls: ${local.smtp_config.server.port == 587 ? "true" : "false"}
+
+      receivers:
+      - name: default-receiver
+        email_configs:
+        - to: gzamboni@gmail.com
+          send_resolved: true
+
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: traefik
+        hosts:
+        - host: alertmanager.${var.domain}
+          paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+    serverFiles:
+      alerting_rules.yml:
+        groups:
+        - name: k3s
+          rules:
+          - alert: LowDiskSpaceWarning
+            expr: 100 * (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 25
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Low disk space on {{ $labels.instance }}"
+              description: "{{ $labels.instance }} has less than 25% disk space available."
+          - alert: LowDiskSpaceCritical
+            expr: 100 * (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 10
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Low disk space on {{ $labels.instance }}"
+              description: "{{ $labels.instance }} has less than 10% disk space available."
+  EOF
+  ]
 }
 
 
@@ -80,3 +135,4 @@ resource "helm_release" "grafana" {
   ]
   depends_on = [helm_release.prometheus]
 }
+

@@ -31,13 +31,8 @@ module "pvc_storage_manager" {
 }
 
 module "prometheus" {
-  source     = "./prometheus"
-  domain     = "k3s.${var.local_domain}"
-  depends_on = [module.pvc_storage_manager]
+  source              = "./prometheus"
+  domain              = "k3s.${var.local_domain}"
+  default_smtp_config = var.default_smtp_config
+  depends_on          = [module.pvc_storage_manager]
 }
-
-# module "dashboard" {
-#   source     = "./kubedash"
-#   domain     = "k3s.${var.local_domain}"
-#   depends_on = [module.pvc_storage_manager]
-# }

@@ -6,6 +6,7 @@ module "zcluster" {
   nodes                = var.k3s_config.nodes
   node_users           = var.k3s_config.users
   metallb_address_pool = var.metallb_address_pool
+  default_smtp_config  = var.default_smtp_config
 }
 
 module "dyndns" {
