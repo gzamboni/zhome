@@ -25,12 +25,19 @@ module "loadbalancer_metallb" {
 
 module "pvc_storage_manager" {
   source     = "./longhorn"
-  namespace  = "longhorn-system"
+  namespace  = "longhorn-storage"
   data_path  = "/storage"
-  depends_on = [module.k3s]
+  depends_on = [module.loadbalancer_metallb]
 }
 
 module "prometheus" {
-  source = "./prometheus"
-  domain = "k3s.${var.local_domain}"
+  source     = "./prometheus"
+  domain     = "k3s.${var.local_domain}"
+  depends_on = [module.pvc_storage_manager]
 }
+
+# module "dashboard" {
+#   source     = "./kubedash"
+#   domain     = "k3s.${var.local_domain}"
+#   depends_on = [module.pvc_storage_manager]
+# }

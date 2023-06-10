@@ -20,6 +20,7 @@ resource "helm_release" "longhorn_storage" {
   chart      = "longhorn"
   namespace  = kubernetes_namespace.longhorn_storage.metadata[0].name
   depends_on = [kubernetes_namespace.longhorn_storage]
+  timeout    = 1200
 
   set {
     name  = "defaultSettings.defaultDataPath"
@@ -48,6 +49,5 @@ resource "kubernetes_storage_class" "longhorn_external" {
     numberOfReplicas    = "1"
     staleReplicaTimeout = "480"
     diskSelector        = "external"
-    nodeSelector        = "sata_node"
   }
 }

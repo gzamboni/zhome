@@ -1,11 +1,10 @@
 resource "helm_release" "prometheus" {
-  name       = "prometheus"
-  namespace  = "prometheus"
-  repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "prometheus"
-  version    = "22.6.0"
-
-  wait             = false
+  name             = "prometheus"
+  namespace        = "prometheus"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "prometheus"
+  version          = "22.6.0"
+  wait             = true
   create_namespace = true
 
   set {
