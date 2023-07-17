@@ -74,10 +74,10 @@ resource "helm_release" "prometheus" {
         global:
           smtp_hello: ${local.smtp_config.server.helo_name}
           smtp_from: ${local.smtp_config.email_config.from}
-          smtp_smarthost: ${local.smtp_config.server.host}:${local.smtp_config.server.port}
+          smtp_smarthost: ${local.smtp_config.server.host}:587
           smtp_auth_username: ${local.smtp_config.auth.username}
           smtp_auth_password: ${local.smtp_config.auth.password}
-          smtp_require_tls: ${local.smtp_config.server.port == 587 ? "true" : "false"}
+          smtp_require_tls: true
 
       receivers:
       - name: default-receiver
