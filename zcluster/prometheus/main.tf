@@ -21,7 +21,7 @@ resource "helm_release" "prometheus" {
   }
   set {
     name  = "server.persistentVolume.storageClass"
-    value = "longhorn-external"
+    value = "longhorn-ssd"
   }
   set {
     name  = "server.persistentVolume.accessModes[0]"
@@ -37,7 +37,7 @@ resource "helm_release" "prometheus" {
   }
   set {
     name  = "server.resources.requests.memory"
-    value = "1Gi"
+    value = "2Gi"
   }
   set {
     name  = "server.resources.requests.cpu"
@@ -45,7 +45,7 @@ resource "helm_release" "prometheus" {
   }
   set {
     name  = "server.resources.limits.memory"
-    value = "2Gi"
+    value = "3Gi"
   }
   set {
     name  = "server.resources.limits.cpu"
@@ -65,7 +65,7 @@ resource "helm_release" "prometheus" {
   }
   set {
     name  = "alertmanager.persistentVolume.storageClass"
-    value = "longhorn-external"
+    value = "longhorn-ssd"
   }
 
   values = [<<-EOF
@@ -121,18 +121,18 @@ resource "helm_release" "prometheus" {
 }
 
 
-resource "helm_release" "grafana" {
-  name       = "grafana"
-  namespace  = "prometheus"
-  repository = "https://grafana.github.io/helm-charts"
-  chart      = "grafana"
+# resource "helm_release" "grafana" {
+#   name       = "grafana"
+#   namespace  = "prometheus"
+#   repository = "https://grafana.github.io/helm-charts"
+#   chart      = "grafana"
 
-  wait             = false
-  create_namespace = true
+#   wait             = false
+#   create_namespace = true
 
-  values = [
-    file("${path.module}/values/grafana.yaml"),
-  ]
-  depends_on = [helm_release.prometheus]
-}
+#   values = [
+#     file("${path.module}/values/grafana.yaml"),
+#   ]
+#   depends_on = [helm_release.prometheus]
+# }
 

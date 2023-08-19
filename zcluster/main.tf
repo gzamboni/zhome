@@ -24,10 +24,13 @@ module "loadbalancer_metallb" {
 }
 
 module "pvc_storage_manager" {
-  source     = "./longhorn"
-  namespace  = "longhorn-storage"
-  data_path  = "/storage"
-  depends_on = [module.loadbalancer_metallb]
+  source               = "./longhorn"
+  namespace            = "longhorn-storage"
+  data_path            = "/storage"
+  cifs_backup_user     = var.cifs_backup_user
+  cifs_backup_password = var.cifs_backup_password
+  cifs_backup_target   = var.cifs_backup_target
+  depends_on           = [module.loadbalancer_metallb]
 }
 
 module "prometheus" {

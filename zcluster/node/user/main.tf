@@ -1,5 +1,6 @@
 
 resource "null_resource" "user" {
+  count = 1
   provisioner "remote-exec" {
     inline = [
       "id ${var.username} || adduser --disabled-password --gecos '' ${var.username}",
@@ -26,6 +27,7 @@ resource "null_resource" "user" {
 
 # Add User to Sudors without password
 resource "null_resource" "sudo" {
+  count = 1
   provisioner "remote-exec" {
     inline = [
       "echo '${var.username} ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"
@@ -39,5 +41,5 @@ resource "null_resource" "sudo" {
       private_key = file("~/.ssh/id_rsa")
     }
   }
-  depends_on = [null_resource.user]
+  # depends_on = [null_resource.user]
 }

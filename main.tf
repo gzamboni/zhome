@@ -7,6 +7,9 @@ module "zcluster" {
   node_users           = var.k3s_config.users
   metallb_address_pool = var.metallb_address_pool
   default_smtp_config  = var.default_smtp_config
+  cifs_backup_user     = var.cifs_backup_user
+  cifs_backup_password = var.cifs_backup_password
+  cifs_backup_target   = var.cifs_backup_target
 }
 
 module "dyndns" {
@@ -27,4 +30,16 @@ module "zvault" {
   org_creation_users   = var.vaultwarden_config.org_creation_users
   default_vault_domain = var.vaultwarden_config.default_vault_domain
   smtp_config          = var.default_smtp_config
+}
+
+module "qdrant" {
+  source     = "./qdrant_db"
+  depends_on = [module.zcluster]
+}
+
+module "helms" {
+  source            = "./helm"
+  depends_on        = [module.zcluster]
+  flowise_config    = var.flowise_config
+  postgresql_config = var.postgresql_config
 }

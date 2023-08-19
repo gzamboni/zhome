@@ -25,7 +25,7 @@ resource "helm_release" "metal_lb" {
   repository = "https://metallb.github.io/metallb"
   chart      = "metallb"
   namespace  = kubernetes_namespace.metal_lb_namespace.metadata[0].name
-  version    = "0.13.9"
+  version    = "0.13.10"
 }
 
 resource "kubectl_manifest" "metal_lb_address_pool" {
@@ -53,7 +53,7 @@ resource "kubectl_manifest" "metal_lb_L2Advertisement" {
     namespace: ${var.namespace}
   spec:
     ipAddressPools:
-    - ${local.address_pool_name}
+    - ${var.address_pool.name}
   EOF
   depends_on = [resource.kubectl_manifest.metal_lb_address_pool]
 }

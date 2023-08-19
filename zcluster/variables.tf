@@ -88,3 +88,17 @@ variable "default_smtp_config" {
     error_message = "default_smtp_config.server.port and default_smtp_config.server.security are incompatible. See https://github.com/dani-garcia/vaultwarden/blob/9e5b049dca6438cf289619c325406d420ef97c78/.env.template#L391"
   }
 }
+
+variable "cifs_backup_user" {
+  description = "value of the cifs backup user"
+  default     = "backup"
+}
+
+variable "cifs_backup_password" {
+  description = "value of the cifs backup password"
+  default     = "backup"
+}
+
+variable "cifs_backup_target" {
+  description = "value of the cifs backup server"
+}

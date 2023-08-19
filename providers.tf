@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.20.0"
     }
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = "1.20.0"
+    }
   }
 }
 
@@ -41,3 +45,11 @@ provider "helm" {
   }
 }
 
+provider "postgresql" {
+  host            = "postgresql.postgresql.svc.cluster.local"
+  port            = 5432
+  database        = "postgres"
+  username        = "postgres"
+  password        = var.postgresql_config.auth.postgresPassword
+  connect_timeout = 15
+}
