@@ -7,7 +7,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.9.0"
+      version = "2.10.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -43,13 +43,4 @@ provider "helm" {
     config_context = var.k3s_config.context
     host           = local.master_url
   }
-}
-
-provider "postgresql" {
-  host            = "postgresql.postgresql.svc.cluster.local"
-  port            = 5432
-  database        = "postgres"
-  username        = "postgres"
-  password        = var.postgresql_config.auth.postgresPassword
-  connect_timeout = 15
 }

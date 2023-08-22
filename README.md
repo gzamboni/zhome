@@ -30,7 +30,7 @@ This repository contains the new terraform modules to configure my personal K8s 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=0.13 |
-| <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.9.0 |
+| <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.10.1 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | 1.14.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.20.0 |
 | <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | 1.20.0 |
@@ -45,6 +45,8 @@ No providers.
 |------|--------|---------|
 | <a name="module_dyndns"></a> [dyndns](#module\_dyndns) | ./dyndns | n/a |
 | <a name="module_helms"></a> [helms](#module\_helms) | ./helm | n/a |
+| <a name="module_n8n"></a> [n8n](#module\_n8n) | ./n8n | n/a |
+| <a name="module_postgresql"></a> [postgresql](#module\_postgresql) | ./postgresql | n/a |
 | <a name="module_qdrant"></a> [qdrant](#module\_qdrant) | ./qdrant_db | n/a |
 | <a name="module_zcluster"></a> [zcluster](#module\_zcluster) | ./zcluster | n/a |
 | <a name="module_zvault"></a> [zvault](#module\_zvault) | ./vaultwarden | n/a |
@@ -73,5 +75,8 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_postgresql_external_ip"></a> [postgresql\_external\_ip](#output\_postgresql\_external\_ip) | n/a |
+| <a name="output_postgresql_service_host"></a> [postgresql\_service\_host](#output\_postgresql\_service\_host) | n/a |
 <!-- END_TF_DOCS -->

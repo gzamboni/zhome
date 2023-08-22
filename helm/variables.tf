@@ -75,18 +75,6 @@ variable "flowise_config" {
   }
 }
 
-variable "postgresql_config" {
-  description = "values to pass to the postgresql chart"
-  type = object({
-    enabled = bool
-    auth = object({
-      postgresPassword = string
-    })
-  })
-  default = {
-    enabled = false
-    auth = {
-      postgresPassword = ""
-    }
-  }
+variable "postgresql_cluster_host" {
+  type = string
 }

@@ -6,11 +6,11 @@ resource "kubernetes_namespace" "flowise_namespace" {
 }
 
 resource "postgresql_role" "flowise_db_user" {
-  count      = var.flowise_config.database.enabled ? 1 : 0
-  name       = var.flowise_config.database.username
-  login      = true
-  password   = var.flowise_config.database.password
-  depends_on = [helm_release.postgresql]
+  count    = var.flowise_config.enabled ? 1 : 0
+  name     = var.flowise_config.database.username
+  login    = true
+  password = var.flowise_config.database.password
+  # depends_on = [helm_release.postgresql]
 }
 
 
@@ -28,7 +28,7 @@ resource "helm_release" "flowise" {
   namespace  = kubernetes_namespace.flowise_namespace[count.index].metadata[0].name
   depends_on = [
     kubernetes_namespace.flowise_namespace,
-    helm_release.postgresql,
+    # helm_release.postgresql,
     postgresql_database.flowise_db
   ]
   cleanup_on_fail = true
