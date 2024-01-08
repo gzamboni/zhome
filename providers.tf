@@ -13,10 +13,6 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.20.0"
     }
-    postgresql = {
-      source  = "cyrilgdn/postgresql"
-      version = "1.20.0"
-    }
   }
 }
 
