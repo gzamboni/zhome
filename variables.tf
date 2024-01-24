@@ -196,3 +196,41 @@ variable "cifs_backup_password" {
 variable "cifs_backup_target" {
   description = "value of the cifs backup server"
 }
+
+variable "adguard_config" {
+  description = "Object containing adguard configuration"
+  type = object({
+    enabled = bool
+    ip      = string
+    admin = object({
+      token = string
+    })
+    api = object({
+      password = string
+    })
+    filter_list = list(object({
+      name    = string
+      url     = string
+      enabled = bool
+    }))
+    rewrites = list(object({
+      hostname = string
+      ip       = string
+      enabled  = bool
+    }))
+    user_rules = list(string)
+  })
+  default = {
+    enabled = false
+    ip      = ""
+    admin = {
+      token = ""
+    }
+    api = {
+      password = ""
+    }
+    filter_list = []
+    rewrites    = []
+    user_rules  = []
+  }
+}

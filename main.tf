@@ -32,3 +32,13 @@ module "zvault" {
   smtp_config          = var.default_smtp_config
 }
 
+module "adguard" {
+  source       = "./adguard"
+  adguard_ip   = var.adguard_config.ip
+  admin_token  = var.adguard_config.admin.token
+  api_password = var.adguard_config.api.password
+  filters      = var.adguard_config.filter_list
+  rewrites     = var.adguard_config.rewrites
+  user_rules   = var.adguard_config.user_rules
+  depends_on   = [module.zcluster]
+}

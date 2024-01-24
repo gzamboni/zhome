@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.20.0"
     }
+    adguard = {
+      source  = "gmichels/adguard"
+      version = "1.1.5"
+    }
   }
 }
 
@@ -39,4 +43,12 @@ provider "helm" {
     config_context = var.k3s_config.context
     host           = local.master_url
   }
+}
+
+provider "adguard" {
+  host     = var.adguard_config.ip
+  username = "admin"
+  password = var.adguard_config.admin.token
+  scheme   = "http" # defaults to https
+  timeout  = 15     # in seconds, defaults to 10
 }
