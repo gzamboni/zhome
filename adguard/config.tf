@@ -1,5 +1,5 @@
 resource "adguard_config" "adguard_zhome" {
-  depends_on = [kubernetes_service.adguard]
+  depends_on = [kubernetes_deployment.adguard]
   filtering = {
     enabled         = true
     update_interval = 1
