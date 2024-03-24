@@ -2,3 +2,4 @@ terraform 1.4.6
 golang 1.19.5
 python 3.11.3
 helm 3.13.3
+kubectl 1.29.3
