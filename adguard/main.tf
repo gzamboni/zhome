@@ -19,9 +19,25 @@ resource "kubernetes_namespace" "adguard" {
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "adguard_pvc" {
+resource "kubernetes_persistent_volume_claim" "adguard_conf_pvc" {
   metadata {
-    name      = "adguard-pvc"
+    name      = "adguard-conf-pvc"
+    namespace = kubernetes_namespace.adguard.metadata.0.name
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+    storage_class_name = "longhorn-nvme"
+  }
+}
+
+resource "kubernetes_persistent_volume_claim" "adguard_work_pvc" {
+  metadata {
+    name      = "adguard-work-pvc"
     namespace = kubernetes_namespace.adguard.metadata.0.name
   }
   spec {
@@ -91,14 +107,25 @@ resource "kubernetes_deployment" "adguard" {
             protocol       = "UDP"
           }
           volume_mount {
+            mount_path = "/opt/adguardhome/conf"
+            name       = "adguard-conf-data"
+          }
+          volume_mount {
             mount_path = "/opt/adguardhome/work"
-            name       = "adguard-data"
+            name       = "adguard-work-data"
           }
         }
         volume {
-          name = "adguard-data"
+          name = "adguard-conf-data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.adguard_pvc.metadata.0.name
+            claim_name = kubernetes_persistent_volume_claim.adguard_conf_pvc.metadata.0.name
+          }
+        }
+        volume {
+          name = "adguard-work-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.adguard_work_pvc.metadata.0.name
+
           }
         }
       }
@@ -158,12 +185,6 @@ resource "kubernetes_config_map_v1" "adguard_config" {
     bind_host: 0.0.0.0
     bind_port: 3000
     language: "en"
-    rlimit_nofile: 0
-    rlimit_nproc: 0
-    log_file: ""
-    log_syslog: false
-    log_syslog_srv: ""
-    pid_file: ""
     verbose: false
     users:
       - name: "admin"

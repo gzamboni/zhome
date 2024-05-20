@@ -3,8 +3,3 @@ variable "kubeconfig_path" {
   type        = string
   default     = "~/.kube/config"
 }
-
-variable "secret_key" {
-  description = "Secret key for FrameOS"
-  type        = string
-}
