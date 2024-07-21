@@ -12,13 +12,13 @@ module "zcluster" {
   cifs_backup_target   = var.cifs_backup_target
 }
 
-module "dyndns" {
-  source                      = "./dyndns"
-  google_dynamic_dns_username = var.google_dynamic_dns_username
-  google_dynamic_dns_password = var.google_dynamic_dns_password
-  google_dynamic_dns_fqdn     = var.google_dynamic_dns_fqdn
-  depends_on                  = [module.zcluster]
-}
+# module "dyndns" {
+#   source                      = "./dyndns"
+#   google_dynamic_dns_username = var.google_dynamic_dns_username
+#   google_dynamic_dns_password = var.google_dynamic_dns_password
+#   google_dynamic_dns_fqdn     = var.google_dynamic_dns_fqdn
+#   depends_on                  = [module.zcluster]
+# }
 
 module "zvault" {
   source               = "./vaultwarden"

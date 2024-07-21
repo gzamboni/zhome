@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "notebook.defaultFormatter": null,
+    "editor.defaultFormatter": "hashicorp.terraform"
+}

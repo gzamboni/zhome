@@ -48,3 +48,6 @@ go.sum
 **/kubeconfig
 
 haasconf
+
+**/files/*
+!**/files/.gitkeep
