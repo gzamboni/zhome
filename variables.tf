@@ -234,3 +234,61 @@ variable "adguard_config" {
     user_rules  = []
   }
 }
+
+variable "uptime_kuma_config" {
+  description = "Object containing Uptime Kuma configuration"
+  type = object({
+    enabled            = bool
+    namespace          = string
+    image              = string
+    replicas           = number
+    port               = number
+    storage_class_name = string
+    storage_size       = string
+    timezone           = string
+    service_type       = string
+    load_balancer_ip   = string
+    ingress_enabled    = bool
+    ingress_class      = string
+    ingress_hosts      = list(string)
+    resources = object({
+      limits = object({
+        cpu    = string
+        memory = string
+      })
+      requests = object({
+        cpu    = string
+        memory = string
+      })
+    })
+  })
+  default = {
+    enabled            = false
+    namespace          = "uptime-kuma"
+    image              = "louislam/uptime-kuma:1"
+    replicas           = 1
+    port               = 3001
+    storage_class_name = "longhorn"
+    storage_size       = "2Gi"
+    timezone           = "UTC"
+    service_type       = "ClusterIP"
+    load_balancer_ip   = ""
+    ingress_enabled    = true
+    ingress_class      = "traefik"
+    ingress_hosts      = []
+    resources = {
+      limits = {
+        cpu    = "500m"
+        memory = "512Mi"
+      }
+      requests = {
+        cpu    = "100m"
+        memory = "128Mi"
+      }
+    }
+  }
+  validation {
+    condition     = contains(["ClusterIP", "NodePort", "LoadBalancer"], var.uptime_kuma_config.service_type)
+    error_message = "Service type must be one of: ClusterIP, NodePort, LoadBalancer"
+  }
+}

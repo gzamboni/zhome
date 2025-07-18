@@ -42,3 +42,22 @@ module "adguard" {
   user_rules   = var.adguard_config.user_rules
   depends_on   = [module.zcluster]
 }
+
+module "uptime_kuma" {
+  count              = var.uptime_kuma_config.enabled ? 1 : 0
+  source             = "./uptime-kuma"
+  namespace          = var.uptime_kuma_config.namespace
+  image              = var.uptime_kuma_config.image
+  replicas           = var.uptime_kuma_config.replicas
+  port               = var.uptime_kuma_config.port
+  storage_class_name = var.uptime_kuma_config.storage_class_name
+  storage_size       = var.uptime_kuma_config.storage_size
+  timezone           = var.uptime_kuma_config.timezone
+  service_type       = var.uptime_kuma_config.service_type
+  load_balancer_ip   = var.uptime_kuma_config.load_balancer_ip
+  ingress_enabled    = var.uptime_kuma_config.ingress_enabled
+  ingress_class      = var.uptime_kuma_config.ingress_class
+  ingress_hosts      = var.uptime_kuma_config.ingress_hosts
+  resources          = var.uptime_kuma_config.resources
+  depends_on         = [module.zcluster]
+}

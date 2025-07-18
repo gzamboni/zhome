@@ -1,0 +1,56 @@
+# Example configuration for Uptime Kuma
+# Copy this file to terraform.tfvars and customize the values
+
+# Uptime Kuma Configuration
+uptime_kuma_config = {
+  enabled            = true
+  namespace          = "uptime-kuma"
+  image              = "louislam/uptime-kuma:1"
+  replicas           = 1
+  port               = 3001
+  storage_class_name = "longhorn"
+  storage_size       = "2Gi"
+  timezone           = "America/Sao_Paulo"
+  service_type       = "ClusterIP"  # Options: ClusterIP, NodePort, LoadBalancer
+  load_balancer_ip   = ""           # Only used when service_type is LoadBalancer
+  ingress_enabled    = true
+  ingress_class      = "traefik"
+  ingress_hosts      = ["uptime.yourdomain.com"]
+  resources = {
+    limits = {
+      cpu    = "500m"
+      memory = "512Mi"
+    }
+    requests = {
+      cpu    = "100m"
+      memory = "128Mi"
+    }
+  }
+}
+
+# Example with LoadBalancer service type:
+# uptime_kuma_config = {
+#   enabled            = true
+#   namespace          = "uptime-kuma"
+#   image              = "louislam/uptime-kuma:1"
+#   replicas           = 1
+#   port               = 3001
+#   storage_class_name = "longhorn"
+#   storage_size       = "5Gi"
+#   timezone           = "America/Sao_Paulo"
+#   service_type       = "LoadBalancer"
+#   load_balancer_ip   = "192.168.1.100"  # Your desired IP from MetalLB pool
+#   ingress_enabled    = false
+#   ingress_class      = "traefik"
+#   ingress_hosts      = []
+#   resources = {
+#     limits = {
+#       cpu    = "1000m"
+#       memory = "1Gi"
+#     }
+#     requests = {
+#       cpu    = "200m"
+#       memory = "256Mi"
+#     }
+#   }
+# }
