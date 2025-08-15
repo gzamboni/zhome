@@ -67,6 +67,26 @@ resource "kubernetes_deployment" "uptime_kuma" {
           fs_group = 1000
         }
 
+        # Init container to install Chromium
+        init_container {
+          name  = "install-chromium"
+          image = "debian:bookworm-slim"
+          command = [
+            "/bin/bash", "-c",
+            <<-EOT
+              apt-get update && \
+              apt-get install -y wget chromium chromium-driver && \
+              mkdir -p /tmp/chrome-bin && \
+              cp /usr/bin/chromium /tmp/chrome-bin/ && \
+              cp /usr/bin/chromedriver /tmp/chrome-bin/ 2>/dev/null || true
+            EOT
+          ]
+          volume_mount {
+            name       = "chrome-bin"
+            mount_path = "/tmp/chrome-bin"
+          }
+        }
+
         container {
           name              = "uptime-kuma"
           image             = var.image
@@ -103,9 +123,47 @@ resource "kubernetes_deployment" "uptime_kuma" {
             value = "1000"
           }
 
+          env {
+            name  = "CHROME_BIN"
+            value = "/usr/bin/chromium"
+          }
+
+          env {
+            name  = "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD"
+            value = "true"
+          }
+
+          env {
+            name  = "PUPPETEER_EXECUTABLE_PATH"
+            value = "/usr/bin/chromium"
+          }
+
+          # Custom command to copy Chromium and start uptime-kuma
+          command = [
+            "/bin/bash", "-c",
+            <<-EOT
+              # Copy Chrome from init container
+              cp -r /tmp/chrome-bin/* /usr/bin/ 2>/dev/null || true && \
+              chmod +x /usr/bin/chromium /usr/bin/chromedriver 2>/dev/null || true && \
+              # Start uptime-kuma
+              exec node server/server.js
+            EOT
+          ]
+
+          volume_mount {
+            name       = "chrome-bin"
+            mount_path = "/tmp/chrome-bin"
+          }
+
           volume_mount {
             name       = "data"
             mount_path = "/app/data"
+          }
+
+          # Run as root to install packages and copy files
+          security_context {
+            run_as_user = 0
+            run_as_group = 0
           }
 
           resources {
@@ -147,6 +205,11 @@ resource "kubernetes_deployment" "uptime_kuma" {
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.uptime_kuma_data.metadata[0].name
           }
+        }
+
+        volume {
+          name = "chrome-bin"
+          empty_dir {}
         }
       }
     }
