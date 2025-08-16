@@ -36,6 +36,7 @@ resources = {
 # Service configuration
 service_type = "ClusterIP"
 external_fqdn = "mysql.local"
+mysql_node_port = 3306
 
 # Node configuration
 node_selector = {

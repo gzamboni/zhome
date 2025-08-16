@@ -119,6 +119,12 @@ variable "external_fqdn" {
   default     = ""
 }
 
+variable "mysql_node_port" {
+  description = "NodePort for MySQL TCP access (if using NodePort service type)"
+  type        = number
+  default     = 3306
+}
+
 # Kubernetes provider configuration
 variable "kubeconfig_path" {
   description = "Path to the kubeconfig file"

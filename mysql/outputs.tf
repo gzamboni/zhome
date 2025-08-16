@@ -34,11 +34,6 @@ output "mysql_external_host" {
   value       = var.external_fqdn != "" ? var.external_fqdn : null
 }
 
-output "mysql_ingress_name" {
-  description = "Name of the MySQL Ingress resource (if created)"
-  value       = var.external_fqdn != "" ? kubernetes_ingress_v1.mysql[0].metadata[0].name : null
-}
-
 output "mysql_database" {
   description = "MySQL database name"
   value       = var.mysql_database

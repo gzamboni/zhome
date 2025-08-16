@@ -24,6 +24,12 @@ resource "kubernetes_secret" "mysql_secret" {
       "app.kubernetes.io/component"  = "database"
       "app.kubernetes.io/managed-by" = "terraform"
     }, var.labels)
+    annotations = {
+      "traefik.enable"                                   = "true"
+      "traefik.tcp.routers.db.rule"                      = "HostSNI(`${var.external_fqdn}`)"
+      "traefik.tcp.services.db.loadbalancer.server.port" = "3306"
+      "traefik.tcp.routers.db.entrypoints"               = "mysql"
+    }
   }
 
   data = {
@@ -198,50 +204,12 @@ resource "kubernetes_service" "mysql" {
       port        = 3306
       target_port = 3306
       name        = "mysql"
+      node_port   = 30306 # Using a valid NodePort in the range 30000-32767
     }
 
-    type = var.service_type
+    type = "NodePort" # Change to NodePort to make it accessible from outside
   }
 }
 
-# MySQL Ingress for external access
-resource "kubernetes_ingress_v1" "mysql" {
-  count = var.external_fqdn != "" ? 1 : 0
-
-  metadata {
-    name      = "${var.name}-ingress"
-    namespace = local.namespace
-    labels = merge({
-      "app.kubernetes.io/name"       = var.name
-      "app.kubernetes.io/component"  = "database"
-      "app.kubernetes.io/managed-by" = "terraform"
-    }, var.labels)
-
-    annotations = {
-      "kubernetes.io/ingress.class"                      = "traefik"
-      "traefik.ingress.kubernetes.io/service.protocol"   = "tcp"
-      "traefik.ingress.kubernetes.io/router.entrypoints" = "mysql"
-      "traefik.ingress.kubernetes.io/router.tls"         = "false"
-    }
-  }
-
-  spec {
-    rule {
-      host = var.external_fqdn
-      http {
-        path {
-          path      = "/"
-          path_type = "Prefix"
-          backend {
-            service {
-              name = kubernetes_service.mysql.metadata[0].name
-              port {
-                number = 3306
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
+# Note: MySQL Ingress has been replaced with TCP Ingress
+# See traefik-config.tf for the TCP ingress configuration
