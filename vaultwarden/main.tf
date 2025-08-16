@@ -82,6 +82,10 @@ resource "helm_release" "vaultwarden" {
     value = var.smtp_config.email_config.embed_images ? "true" : "false"
   }
   set {
+    name  = "image.tag"
+    value = "latest"
+  }
+  set {
     name  = "persistence.data.enabled"
     value = "true"
   }
