@@ -26,7 +26,7 @@ resource "kubernetes_namespace" "vaultwarden_namespace" {
 resource "helm_release" "vaultwarden" {
   name            = "vaultwarden"
   repository      = ""
-  chart           = "https://github.com/gabe565/charts/releases/download/vaultwarden-0.8.0/vaultwarden-0.8.0.tgz"
+  chart           = "https://github.com/gabe565/charts/releases/download/vaultwarden-0.16.0/vaultwarden-0.16.0.tgz"
   namespace       = kubernetes_namespace.vaultwarden_namespace.metadata[0].name
   cleanup_on_fail = true
   set {
@@ -130,7 +130,7 @@ resource "helm_release" "vaultwarden" {
     for_each = var.ingress_hosts
     content {
       name  = "ingress.main.hosts[${set.key}].paths[0].service.port"
-      value = "80"
+      value = "8080"
     }
   }
   dynamic "set" {
@@ -151,7 +151,7 @@ resource "helm_release" "vaultwarden" {
     for_each = var.ingress_hosts
     content {
       name  = "ingress.main.hosts[${set.key}].paths[1].service.port"
-      value = "80"
+      value = "8080"
     }
   }
 

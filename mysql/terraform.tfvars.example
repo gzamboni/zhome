@@ -1,0 +1,46 @@
+# General configuration
+name             = "mysql"
+namespace        = "mysql"
+create_namespace = true
+labels           = {
+  # environment = "dev"
+  # app         = "my-application"
+}
+
+# MySQL configuration
+mysql_root_password = "root"
+mysql_password      = "password"
+mysql_database      = "mysql"
+mysql_user          = "mysql"
+
+# Image configuration
+image_repository = "mysql"
+image_tag        = "8.0"
+
+# Storage configuration
+storage_size       = "10Gi"
+storage_class_name = "longhorn-external"
+
+# Resource configuration
+resources = {
+  limits = {
+    cpu    = "1000m"
+    memory = "1Gi"
+  }
+  requests = {
+    cpu    = "500m"
+    memory = "512Mi"
+  }
+}
+
+# Service configuration
+service_type = "ClusterIP"
+
+# Node configuration
+node_selector = {
+  "kubernetes.io/hostname" = "node"  # Set to the desired node hostname
+}
+
+# Kubernetes provider configuration
+kubeconfig_path    = "~/.kube/config"
+kubeconfig_context = "default"
