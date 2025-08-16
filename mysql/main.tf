@@ -203,3 +203,45 @@ resource "kubernetes_service" "mysql" {
     type = var.service_type
   }
 }
+
+# MySQL Ingress for external access
+resource "kubernetes_ingress_v1" "mysql" {
+  count = var.external_fqdn != "" ? 1 : 0
+
+  metadata {
+    name      = "${var.name}-ingress"
+    namespace = local.namespace
+    labels = merge({
+      "app.kubernetes.io/name"       = var.name
+      "app.kubernetes.io/component"  = "database"
+      "app.kubernetes.io/managed-by" = "terraform"
+    }, var.labels)
+
+    annotations = {
+      "kubernetes.io/ingress.class"                      = "traefik"
+      "traefik.ingress.kubernetes.io/service.protocol"   = "tcp"
+      "traefik.ingress.kubernetes.io/router.entrypoints" = "mysql"
+      "traefik.ingress.kubernetes.io/router.tls"         = "false"
+    }
+  }
+
+  spec {
+    rule {
+      host = var.external_fqdn
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service.mysql.metadata[0].name
+              port {
+                number = 3306
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

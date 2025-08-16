@@ -20,13 +20,23 @@ output "mysql_port" {
 
 output "mysql_connection_string" {
   description = "MySQL connection string for applications"
-  value       = "mysql://${var.mysql_user}:${var.mysql_password}@${kubernetes_service.mysql.metadata[0].name}.${local.namespace}.svc.cluster.local:3306/${var.mysql_database}"
+  value       = "mysql://${var.mysql_user}:${var.mysql_password}@${var.external_fqdn != "" ? var.external_fqdn : "${kubernetes_service.mysql.metadata[0].name}.${local.namespace}.svc.cluster.local"}:3306/${var.mysql_database}"
   sensitive   = true
 }
 
 output "mysql_host" {
-  description = "MySQL host for applications"
+  description = "MySQL host for applications (internal cluster DNS)"
   value       = "${kubernetes_service.mysql.metadata[0].name}.${local.namespace}.svc.cluster.local"
+}
+
+output "mysql_external_host" {
+  description = "External MySQL host FQDN via Traefik Ingress (if configured)"
+  value       = var.external_fqdn != "" ? var.external_fqdn : null
+}
+
+output "mysql_ingress_name" {
+  description = "Name of the MySQL Ingress resource (if created)"
+  value       = var.external_fqdn != "" ? kubernetes_ingress_v1.mysql[0].metadata[0].name : null
 }
 
 output "mysql_database" {

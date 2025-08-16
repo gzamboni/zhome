@@ -35,6 +35,7 @@ resources = {
 
 # Service configuration
 service_type = "ClusterIP"
+external_fqdn = "mysql.local"
 
 # Node configuration
 node_selector = {

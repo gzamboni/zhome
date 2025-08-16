@@ -113,6 +113,12 @@ variable "service_type" {
   default     = "ClusterIP"
 }
 
+variable "external_fqdn" {
+  description = "External FQDN for accessing MySQL outside the cluster"
+  type        = string
+  default     = ""
+}
+
 # Kubernetes provider configuration
 variable "kubeconfig_path" {
   description = "Path to the kubeconfig file"
