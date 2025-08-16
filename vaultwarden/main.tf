@@ -83,7 +83,7 @@ resource "helm_release" "vaultwarden" {
   }
   set {
     name  = "image.tag"
-    value = "latest"
+    value = "latest-alpine"
   }
   set {
     name  = "persistence.data.enabled"
@@ -158,7 +158,6 @@ resource "helm_release" "vaultwarden" {
       value = "8080"
     }
   }
-
   dynamic "set" {
     for_each = var.ingress_hosts
     content {
@@ -178,6 +177,27 @@ resource "helm_release" "vaultwarden" {
     content {
       name  = "ingress.main.hosts[${set.key}].paths[2].service.port"
       value = "3012"
+    }
+  }
+  dynamic "set" {
+    for_each = var.ingress_hosts
+    content {
+      name  = "ingress.main.hosts[${set.key}].paths[3].path"
+      value = "/api"
+    }
+  }
+  dynamic "set" {
+    for_each = var.ingress_hosts
+    content {
+      name  = "ingress.main.hosts[${set.key}].paths[3].pathType"
+      value = "Prefix"
+    }
+  }
+  dynamic "set" {
+    for_each = var.ingress_hosts
+    content {
+      name  = "ingress.main.hosts[${set.key}].paths[3].service.port"
+      value = "8080"
     }
   }
 }
