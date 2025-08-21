@@ -25,6 +25,10 @@ firefly_app_password = "your-secure-app-password-here"
 # (Recommended: leave empty for auto-generation to avoid MySQL auth issues)
 firefly_db_password = ""
 
+# Access token for Firefly III API (required for importer service)
+# This token is used by the data importer to connect to Firefly III
+firefly_access_token = "your-firefly-iii-access-token"
+
 # Database name for Firefly III
 # Default: "firefly"
 firefly_db_name = "firefly"
@@ -50,6 +54,10 @@ mysql_service_name = "mysql"
 # Fully Qualified Domain Name for the Firefly III application
 # Default: "financeiro.k3s.zhome.local"
 fqdn = "finance.example.com"
+
+# Fully Qualified Domain Name for the Firefly III Importer application
+# Default: "importer.k3s.zhome.local"
+importer_fqdn = "importer.example.com"
 
 # Resource allocation
 #------------------
