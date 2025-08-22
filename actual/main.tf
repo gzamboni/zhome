@@ -65,10 +65,11 @@ resource "kubernetes_deployment" "actual" {
             mount_path = "/data"
             name       = "data"
           }
-          security_context {
-            run_as_user  = 1000
-            run_as_group = 1000
-          }
+          command = [
+            "sh",
+            "-c",
+            "apk update && apk add --no-cache sqlite && chown -R 1000:1000 /data && exec su-exec 1000:1000 actual-server"
+          ]
           resources {
             limits = {
               cpu    = "500m"
