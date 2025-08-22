@@ -68,7 +68,7 @@ resource "kubernetes_deployment" "actual" {
           command = [
             "sh",
             "-c",
-            "apk update && apk add --no-cache sqlite && chown -R 1000:1000 /data && exec su-exec 1000:1000 actual-server"
+            "apk update && apk add --no-cache sqlite && cd /app && node app.js"
           ]
           resources {
             limits = {
