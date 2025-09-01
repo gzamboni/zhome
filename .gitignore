@@ -53,3 +53,4 @@ haasconf
 !**/files/.gitkeep
 .aider*
 .env
+.env
