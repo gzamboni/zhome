@@ -124,7 +124,7 @@ resource "kubernetes_deployment" "openwebui" {
           resources {
             limits = {
               cpu    = "1"
-              memory = "2Gi"
+              memory = "3Gi"
             }
             requests = {
               cpu    = "250m"
