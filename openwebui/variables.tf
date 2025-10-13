@@ -32,3 +32,9 @@ variable "auth0_domain" {
   description = "Auth0 domain"
   type        = string
 }
+
+variable "image_tag" {
+  description = "The image tag to use for the openwebui container"
+  type        = string
+  default     = "v0.6.30"
+}

@@ -46,7 +46,7 @@ resource "kubernetes_deployment" "openwebui" {
         }
         container {
           name              = var.namespace
-          image             = "ghcr.io/open-webui/open-webui:main"
+          image             = "ghcr.io/open-webui/open-webui:${var.image_tag}"
           image_pull_policy = "IfNotPresent"
           port {
             container_port = 8080
