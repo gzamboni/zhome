@@ -292,3 +292,19 @@ variable "uptime_kuma_config" {
     error_message = "Service type must be one of: ClusterIP, NodePort, LoadBalancer"
   }
 }
+
+variable "cloudflare_email" {
+  description = "Cloudflare account email"
+  type        = string
+}
+
+variable "cloudflare_api_key" {
+  description = "Cloudflare Global API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare Zone ID for zamboni.dev"
+  type        = string
+}

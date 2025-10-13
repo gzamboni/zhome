@@ -61,3 +61,19 @@ module "uptime_kuma" {
   resources          = var.uptime_kuma_config.resources
   depends_on         = [module.zcluster]
 }
+
+module "cloudflare_dns_updater" {
+  source             = "./cloudflare-dns-updater"
+  cloudflare_email   = var.cloudflare_email
+  cloudflare_api_key = var.cloudflare_api_key
+  cloudflare_zone_id = var.cloudflare_zone_id
+  link1_config = {
+    record_name = "_01"
+    node_name   = "zcm01"
+  }
+  link2_config = {
+    record_name = "_v1v0"
+    node_name   = "zcm02"
+  }
+  depends_on = [module.zcluster]
+}
