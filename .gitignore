@@ -54,3 +54,5 @@ haasconf
 .aider*
 .env
 .env
+
+nodes/
