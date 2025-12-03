@@ -5,13 +5,22 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.20.0"
     }
-    # adguard = {
-    #   source  = "gmichels/adguard"
-    #   version = "1.6.2"
-    # }
+    bcrypt = {
+      source  = "viktorradnai/bcrypt"
+      version = "0.1.2"
+    }
   }
 }
 
+resource "bcrypt_hash" "admin_password" {
+  cleartext = var.admin_password
+  cost      = 10
+}
+
+resource "bcrypt_hash" "api_password" {
+  cleartext = var.api_password
+  cost      = 10
+}
 
 resource "kubernetes_namespace" "adguard" {
   metadata {
@@ -81,7 +90,7 @@ resource "kubernetes_deployment" "adguard" {
             name = "AGH_CONFIG"
             value_from {
               config_map_key_ref {
-                name = "adguard-config"
+                name = kubernetes_config_map_v1.adguard_config.metadata[0].name
                 key  = "AdGuardHome.yaml"
               }
             }
@@ -125,7 +134,6 @@ resource "kubernetes_deployment" "adguard" {
           name = "adguard-work-data"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.adguard_work_pvc.metadata.0.name
-
           }
         }
       }
@@ -188,13 +196,10 @@ resource "kubernetes_config_map_v1" "adguard_config" {
     verbose: false
     users:
       - name: "admin"
-        password: "${var.admin_token}"
+        password: "${bcrypt_hash.admin_password.id}"
 
       - name: "api"
-        password: "${var.api_password}"
+        password: "${bcrypt_hash.api_password.id}"
     EOF
   }
 }
-
-
-

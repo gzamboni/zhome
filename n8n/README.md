@@ -30,7 +30,7 @@ module "n8n" {
 
   # Optional parameters with defaults
   n8n_namespace         = "n8n"
-  storage_class_name    = "longhorn-ssd"
+  storage_class_name    = "longhorn"
   n8n_data_storage_size = "5Gi"
   n8n_image             = "n8nio/n8n:latest"
   n8n_replicas          = 1
@@ -69,7 +69,7 @@ module "n8n" {
 |------|-------------|------|---------|----------|
 | n8n_ip_address | IP address for the n8n service | string | n/a | yes |
 | n8n_namespace | Kubernetes namespace for n8n | string | "n8n" | no |
-| storage_class_name | Storage class name for persistent volumes | string | "longhorn-ssd" | no |
+| storage_class_name | Storage class name for persistent volumes | string | "longhorn" | no |
 | n8n_data_storage_size | Size of the persistent volume for n8n data | string | "5Gi" | no |
 | n8n_image | Docker image for n8n | string | "n8nio/n8n:latest" | no |
 | n8n_replicas | Number of n8n replicas | number | 1 | no |

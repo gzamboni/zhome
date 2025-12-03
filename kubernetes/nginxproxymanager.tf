@@ -17,7 +17,7 @@ resource "kubernetes_persistent_volume_claim" "nginx_proxy_manager_data_pvc" {
         storage = "2Gi"
       }
     }
-    storage_class_name = "longhorn-ssd"
+    storage_class_name = "longhorn"
   }
 }
 
@@ -34,7 +34,7 @@ resource "kubernetes_persistent_volume_claim" "nginx_proxy_manager_certs_pvc" {
         storage = "2Gi"
       }
     }
-    storage_class_name = "longhorn-ssd"
+    storage_class_name = "longhorn"
   }
 }
 

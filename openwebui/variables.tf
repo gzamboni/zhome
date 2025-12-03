@@ -7,7 +7,7 @@ variable "namespace" {
 variable "storage_class_name" {
   description = "The storage class name to use for the PVC"
   type        = string
-  default     = "longhorn-ssd"
+  default     = "longhorn"
 }
 
 variable "fqdn" {

@@ -15,7 +15,11 @@ terraform {
     }
     adguard = {
       source  = "gmichels/adguard"
-      version = "1.1.5"
+      version = "1.6.2"
+    }
+    bcrypt = {
+      source  = "viktorradnai/bcrypt"
+      version = "0.1.2"
     }
   }
 }
@@ -50,5 +54,5 @@ provider "adguard" {
   username = "admin"
   password = var.adguard_config.admin.token
   scheme   = "http" # defaults to https
-  timeout  = 15     # in seconds, defaults to 10
+  timeout  = 30     # increased timeout to 30 seconds
 }

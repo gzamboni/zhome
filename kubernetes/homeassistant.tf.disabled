@@ -16,7 +16,7 @@ resource "kubernetes_persistent_volume_claim" "homeassistant_data" {
         storage = "10Gi"
       }
     }
-    storage_class_name = "longhorn-ssd"
+    storage_class_name = "longhorn"
   }
 }
 

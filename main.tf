@@ -24,16 +24,31 @@ module "zcluster" {
 #   smtp_config          = var.default_smtp_config
 # }
 
-# module "adguard" {
-#   source       = "./adguard"
-#   adguard_ip   = var.adguard_config.ip
-#   admin_token  = var.adguard_config.admin.token
-#   api_password = var.adguard_config.api.password
-#   filters      = var.adguard_config.filter_list
-#   rewrites     = var.adguard_config.rewrites
-#   user_rules   = var.adguard_config.user_rules
-#   depends_on   = [module.zcluster]
-# }
+# AdGuard Home deployment in two stages:
+# 1. Install the Kubernetes resources
+module "adguard_install" {
+  source         = "./adguard/install"
+  adguard_ip     = var.adguard_config.ip
+  admin_password = var.adguard_config.admin.token
+  api_password   = var.adguard_config.api.password
+  depends_on     = [module.zcluster]
+}
+
+# 2. Configure AdGuard Home using the provider
+# This module will only be applied during terraform apply, not during plan
+module "adguard_config" {
+  count          = var.adguard_config.enabled ? 1 : 0
+  source         = "./adguard/config"
+  adguard_ip     = module.adguard_install.adguard_ip
+  admin_password = var.adguard_config.admin.token
+  filters        = var.adguard_config.filter_list
+  rewrites       = var.adguard_config.rewrites
+  user_rules     = var.adguard_config.user_rules
+
+  providers = {
+    adguard = adguard
+  }
+}
 
 # module "uptime_kuma" {
 #   count              = var.uptime_kuma_config.enabled ? 1 : 0

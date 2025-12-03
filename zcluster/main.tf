@@ -9,6 +9,7 @@ module "zcluster_nodes" {
   node_users        = var.node_users
 }
 
+# NFS module for each node - server on zcm03, clients on other nodes
 module "zcluster_nfs" {
   for_each               = var.nodes
   source                 = "./nfs"
@@ -24,26 +25,30 @@ module "zcluster_nfs" {
   depends_on             = [module.zcluster_nodes]
 }
 
-# module "k3s" {
-#   source     = "./k3s"
-#   nodes      = var.nodes
-#   ssh_key    = file("~/.ssh/id_rsa")
-#   depends_on = [module.zcluster_nodes]
-# }
+# K3s module - uses /var/k3s as data directory which is mounted from NFS
+module "k3s" {
+  source     = "./k3s"
+  nodes      = var.nodes
+  ssh_key    = file("~/.ssh/id_rsa")
+  k3s_user   = "k3s"
+  depends_on = [module.zcluster_nodes, module.zcluster_nfs]
+}
 
-# module "loadbalancer_metallb" {
-#   source       = "./metallb"
-#   namespace    = "metallb-system"
-#   address_pool = var.metallb_address_pool
-#   depends_on   = [module.k3s]
-# }
+# MetalLB load balancer for Kubernetes services
+module "loadbalancer_metallb" {
+  source       = "./metallb"
+  namespace    = "metallb-system"
+  address_pool = var.metallb_address_pool
+  depends_on   = [module.k3s]
+}
 
-# module "pvc_storage_manager" {
-#   source               = "./longhorn"
-#   namespace            = "longhorn-storage"
-#   data_path            = "/storage"
-#   cifs_backup_user     = var.cifs_backup_user
-#   cifs_backup_password = var.cifs_backup_password
-#   cifs_backup_target   = var.cifs_backup_target
-#   depends_on           = [module.loadbalancer_metallb]
-# }
+# Longhorn storage for persistent volumes
+module "pvc_storage_manager" {
+  source               = "./longhorn"
+  namespace            = "longhorn-storage"
+  data_path            = "/storage"
+  cifs_backup_user     = var.cifs_backup_user
+  cifs_backup_password = var.cifs_backup_password
+  cifs_backup_target   = var.cifs_backup_target
+  depends_on           = [module.loadbalancer_metallb]
+}

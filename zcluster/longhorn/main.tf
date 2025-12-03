@@ -26,59 +26,23 @@ resource "helm_release" "longhorn_storage" {
   depends_on = [kubernetes_namespace.longhorn_storage]
   timeout    = 1200
 
-  set {
-    name  = "defaultSettings.defaultDataPath"
-    value = var.data_path
-  }
-  set {
-    name  = "ingress.enabled"
-    value = "true"
-  }
-  set {
-    name  = "ingress.annotations.kubernetes.io/ingress.class"
-    value = "traefik"
-  }
-  set {
-    name  = "ingress.host"
-    value = "longhorn.${var.domain}"
-  }
+  values = [
+    <<-EOT
+    defaultSettings:
+      defaultDataPath: ${var.data_path}
+      backupTarget: ${var.cifs_backup_target}
+      backupTargetCredentialSecret: ${kubernetes_secret.longhorn_cifs_backup_user.metadata[0].name}
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik
+      host: longhorn.${var.domain}
+    EOT
+  ]
 }
 
-resource "kubernetes_storage_class" "longhorn_external" {
-  metadata {
-    name = "longhorn-external"
-  }
-  storage_provisioner = "driver.longhorn.io"
-  parameters = {
-    numberOfReplicas    = "1"
-    staleReplicaTimeout = "480"
-    diskSelector        = "external"
-  }
-}
-
-resource "kubernetes_storage_class" "longhorn_ssd" {
-  metadata {
-    name = "longhorn-ssd"
-  }
-  storage_provisioner = "driver.longhorn.io"
-  parameters = {
-    numberOfReplicas    = "1"
-    staleReplicaTimeout = "480"
-    diskSelector        = "ssd"
-  }
-}
-
-resource "kubernetes_storage_class" "longhorn_nvme" {
-  metadata {
-    name = "longhorn-nvme"
-  }
-  storage_provisioner = "driver.longhorn.io"
-  parameters = {
-    numberOfReplicas    = "1"
-    staleReplicaTimeout = "480"
-    diskSelector        = "nvme"
-  }
-}
+# Storage class is managed by the Longhorn Helm chart
+# Removed to avoid conflicts with the Longhorn operator
 
 resource "kubernetes_secret" "longhorn_cifs_backup_user" {
   metadata {
@@ -91,21 +55,4 @@ resource "kubernetes_secret" "longhorn_cifs_backup_user" {
   }
 }
 
-resource "kubectl_manifest" "longhorn_cifs_backup" {
-  yaml_body  = <<-EOF
-    apiVersion: longhorn.io/v1beta2
-    kind: Setting
-    metadata:
-      name: backup-target
-      namespace: ${kubernetes_namespace.longhorn_storage.metadata[0].name}
-    value: ${var.cifs_backup_target}
-    ---
-    apiVersion: longhorn.io/v1beta2
-    kind: Setting
-    metadata:
-      name: backup-target-credential-secret
-      namespace: ${kubernetes_namespace.longhorn_storage.metadata[0].name}
-    value: ${kubernetes_secret.longhorn_cifs_backup_user.metadata[0].name}
-  EOF
-  depends_on = [kubernetes_secret.longhorn_cifs_backup_user]
-}
+# Backup settings are now configured directly in the Helm chart values

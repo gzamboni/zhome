@@ -16,7 +16,7 @@ variable "n8n_ip_address" {
 variable "storage_class_name" {
   description = "Storage class name for persistent volumes"
   type        = string
-  default     = "longhorn-ssd"
+  default     = "longhorn"
 }
 
 variable "n8n_data_storage_size" {
