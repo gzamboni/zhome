@@ -12,17 +12,17 @@ module "zcluster" {
   cifs_backup_target   = var.cifs_backup_target
 }
 
-# module "zvault" {
-#   source               = "./vaultwarden"
-#   depends_on           = [module.zcluster]
-#   timezone             = var.vaultwarden_config.timezone
-#   ingress_hosts        = var.vaultwarden_config.ingress_hosts
-#   allow_signups        = var.vaultwarden_config.allow_signups
-#   domain_white_list    = var.vaultwarden_config.domain_white_list
-#   org_creation_users   = var.vaultwarden_config.org_creation_users
-#   default_vault_domain = var.vaultwarden_config.default_vault_domain
-#   smtp_config          = var.default_smtp_config
-# }
+module "zvault" {
+  source               = "./vaultwarden"
+  depends_on           = [module.zcluster]
+  timezone             = var.vaultwarden_config.timezone
+  ingress_hosts        = var.vaultwarden_config.ingress_hosts
+  allow_signups        = var.vaultwarden_config.allow_signups
+  domain_white_list    = var.vaultwarden_config.domain_white_list
+  org_creation_users   = var.vaultwarden_config.org_creation_users
+  default_vault_domain = var.vaultwarden_config.default_vault_domain
+  smtp_config          = var.default_smtp_config
+}
 
 # AdGuard Home deployment in two stages:
 # 1. Install the Kubernetes resources
