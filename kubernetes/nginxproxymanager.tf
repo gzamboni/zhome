@@ -141,6 +141,20 @@ resource "kubernetes_service" "nginx_proxy_manager_service" {
     }
 
     port {
+      port        = 8443
+      target_port = 443
+      protocol    = "TCP"
+      name        = "https-alt"
+    }
+
+    port {
+      port        = 8080
+      target_port = 80
+      protocol    = "TCP"
+      name        = "http-alt"
+    }
+
+    port {
       port        = 443
       target_port = 443
       protocol    = "TCP"
